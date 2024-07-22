@@ -10,7 +10,7 @@ import { checkAuth, handleValidationErrors } from './utils/index.js'
 
 import { UserController, InsuranceController, InsuranceTypeController, BranchController} from './controllers/index.js'
 
-mongoose.connect('mongodb+srv://NastuaBudko:123www@studydatabase.5vrpesz.mongodb.net/InsuranceService?retryWrites=true&w=majority&appName=StudyDataBase')
+mongoose.connect(process.env.MONGODB_URL)
     .then(() => console.log('DB ok'))
     .catch((err) => console.log('DB error: ', err))
 
@@ -46,7 +46,7 @@ app.get('/insurance-types/:id', InsuranceTypeController.getOne)
 app.post('/insurance-types', checkAuth,  handleValidationErrors, InsuranceTypeController.create)
 app.delete('/insurance-types/:id', checkAuth,  InsuranceTypeController.remove)
 
-app.listen(5555, (err) => {
+app.listen(process.env.PORT || 5555, (err) => {
     if (err) {
         return console.log(err)
     }
