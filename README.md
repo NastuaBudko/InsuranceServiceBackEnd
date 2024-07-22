@@ -7,11 +7,11 @@ It allows to get, create and delete insurance policies, branches and insurance t
 
 ## API Documentation
 
-Detailed API documentation is available at: [API Docs](https://your-render-url.onrender.com/api-docs)
+Detailed API documentation is available at: [API Docs](https://insurance-service-backend.onrender.com/api-docs)
 
 ## Deployed Backend
 
-The project is deployed on Render and accessible at: [Insurance Service API](https://your-render-url.onrender.com)
+The project is deployed on Render and accessible at: [Insurance Service API](https://insurance-service-backend.onrender.com)
 
 ## Main Endpoints
 
