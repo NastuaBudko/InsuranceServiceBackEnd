@@ -1,0 +1,894 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Insurance Service API",
+      "description": "API documentation for the Insurance Service",
+      "version": "1.0.0"
+    },
+    "host": "localhost:5555",
+    "basePath": "/",
+    "schemes": [
+      "http"
+    ],
+    "tags": [
+      {
+        "name": "Auth",
+        "description": "Endpoints related to user authentication and registration"
+      },
+      {
+        "name": "Insurance",
+        "description": "Endpoints related to insurances"
+      },
+      {
+        "name": "Branch",
+        "description": "Endpoints related to branches"
+      },
+      {
+        "name": "Insurance Type",
+        "description": "Endpoints related to insurance types"
+      }
+    ],
+    "paths": {
+      "/auth/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "User Login",
+          "description": "Logs in a user and returns a token",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "User login details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "example": "jwt.token.here"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid credentials",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid email or password"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to login"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/auth/register": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "User Registration",
+          "description": "Registers a new user",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "User registration details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "middleName": {
+                    "type": "string",
+                    "example": "Mitchel"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+1234567890"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "example": "branchId"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User registered successfully"
+            },
+            "400": {
+              "description": "Invalid data",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid registration data"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to register"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/auth/me": {
+        "get": {
+          "tags": ["Auth"],
+          "summary": "Get User Info",
+          "description": "Returns the authenticated user's information",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "userId"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "middleName": {
+                    "type": "string",
+                    "example": "M"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "example": "+1234567890"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "example": "branchId"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "User not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Access denied"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/insurances": {
+        "get": {
+          "tags": ["Insurance"],
+          "summary": "Get All Insurances",
+          "description": "Returns a list of all insurances",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "insuranceId"
+                    },
+                    "insuranceSum": {
+                      "type": "number",
+                      "example": 1000
+                    },
+                    "tariffRate": {
+                      "type": "number",
+                      "example": 5
+                    },
+                    "branch": {
+                      "type": "string",
+                      "example": "branchId"
+                    },
+                    "insuranceType": {
+                      "type": "string",
+                      "example": "insuranceTypeId"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to load insurances"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Insurance"],
+          "summary": "Create Insurance",
+          "description": "Creates a new insurance",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Insurance details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "insuranceSum": {
+                    "type": "number",
+                    "example": 1000
+                  },
+                  "tariffRate": {
+                    "type": "number",
+                    "example": 5
+                  },
+                  "branch": {
+                    "type": "string",
+                    "example": "branchId"
+                  },
+                  "insuranceType": {
+                    "type": "string",
+                    "example": "insuranceTypeId"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Insurance created successfully"
+            },
+            "400": {
+              "description": "Invalid data",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid insurance data"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to create insurance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/insurances/{id}": {
+        "get": {
+          "tags": ["Insurance"],
+          "summary": "Get Insurance by ID",
+          "description": "Returns an insurance by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "insuranceId"
+                  },
+                  "insuranceSum": {
+                    "type": "number",
+                    "example": 1000
+                  },
+                  "tariffRate": {
+                    "type": "number",
+                    "example": 5
+                  },
+                  "branch": {
+                    "type": "string",
+                    "example": "branchId"
+                  },
+                  "insuranceType": {
+                    "type": "string",
+                    "example": "insuranceTypeId"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Insurance not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Insurance not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to get insurance"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Insurance"],
+          "summary": "Delete Insurance",
+          "description": "Deletes an insurance by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Insurance deleted successfully"
+            },
+            "404": {
+              "description": "Insurance not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Insurance not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to delete insurance"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/branches": {
+        "get": {
+          "tags": ["Branch"],
+          "summary": "Get All Branches",
+          "description": "Returns a list of all branches",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "branchId"
+                    },
+                    "branchName": {
+                      "type": "string",
+                      "example": "Main Branch"
+                    },
+                    "address": {
+                      "type": "string",
+                      "example": "123 Main St"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to load branches"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Branch"],
+          "summary": "Create Branch",
+          "description": "Creates a new branch",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Branch details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "branchName": {
+                    "type": "string",
+                    "example": "Main Branch"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Branch created successfully"
+            },
+            "400": {
+              "description": "Invalid data",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid branch data"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to create branch"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/branches/{id}": {
+        "get": {
+          "tags": ["Branch"],
+          "summary": "Get Branch by ID",
+          "description": "Returns a branch by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "branchId"
+                  },
+                  "branchName": {
+                    "type": "string",
+                    "example": "Main Branch"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "123 Main St"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Branch not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Branch not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to get branch"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Branch"],
+          "summary": "Delete Branch",
+          "description": "Deletes a branch by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Branch deleted successfully"
+            },
+            "404": {
+              "description": "Branch not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Branch, which you want to delete, is not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to delete branch"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/insurance-types": {
+        "get": {
+          "tags": ["Insurance Type"],
+          "summary": "Get All Insurance Types",
+          "description": "Returns a list of all insurance types",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "insuranceTypeId"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Health Insurance"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Covers medical expenses"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to load insurance types"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Insurance Type"],
+          "summary": "Create Insurance Type",
+          "description": "Creates a new insurance type",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Insurance type details",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Health Insurance"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Covers medical expenses"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Insurance type created successfully"
+            },
+            "400": {
+              "description": "Invalid data",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Invalid insurance type data"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to create insurance type"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/insurance-types/{id}": {
+        "get": {
+          "tags": ["Insurance Type"],
+          "summary": "Get Insurance Type by ID",
+          "description": "Returns an insurance type by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "insuranceTypeId"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Health Insurance"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Covers medical expenses"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Insurance type not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Insurance type not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to get insurance type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Insurance Type"],
+          "summary": "Delete Insurance Type",
+          "description": "Deletes an insurance type by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Insurance type deleted successfully"
+            },
+            "404": {
+              "description": "Insurance type not found",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Insurance type not found"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Failed to delete insurance type"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "bearerAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Enter your JWT token"
+      }
+    },
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ]
+  }
+  
