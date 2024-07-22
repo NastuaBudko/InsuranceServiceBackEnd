@@ -5,7 +5,7 @@ const doc = {
     title: 'Insurance Service API',
     description: 'API documentation for the Insurance Service',
   },
-  host: 'localhost:5555',
+  host: process.env.SERVER_URL || 'localhost:5555',
   schemes: ['http'],
 };
 

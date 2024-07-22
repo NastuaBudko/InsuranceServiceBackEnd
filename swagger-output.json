@@ -5,7 +5,7 @@
       "description": "API documentation for the Insurance Service",
       "version": "1.0.0"
     },
-    "host": "localhost:5555",
+    "host": "https://insurance-service-backend.onrender.com",
     "basePath": "/",
     "schemes": [
       "http"
